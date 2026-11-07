@@ -15,6 +15,13 @@
   backdrop-filter: blur(14px);
 }
 
+.app-shell {
+  --page-accent: #355d4d;
+  --page-accent-strong: #254637;
+  --page-soft: #edf3ee;
+  --page-glow: rgba(53, 93, 77, 0.18);
+}
+
 .topbar-inner {
   display: flex;
   align-items: center;
@@ -47,9 +54,9 @@
 .brand-mark span {
   width: 12px;
   height: 21px;
-  border: 1.5px solid var(--green);
+  border: 1.5px solid var(--page-accent, var(--green));
   border-radius: 3px 1px 1px 3px;
-  background: #e6ece5;
+  background: rgba(255, 255, 255, 0.45);
 }
 
 .brand-mark span + span {
@@ -77,7 +84,7 @@
 .nav-link:hover,
 .nav-link.active,
 .text-link:hover {
-  color: var(--green);
+  color: var(--page-accent, var(--green));
 }
 
 .nav-link.active {
@@ -90,7 +97,7 @@
   bottom: -28px;
   left: 0;
   height: 2px;
-  background: var(--green);
+  background: var(--page-accent, var(--green));
   content: "";
 }
 
@@ -100,8 +107,8 @@
   height: 35px;
   place-items: center;
   border-radius: 50%;
-  color: var(--green-dark);
-  background: #e8eee8;
+  color: var(--page-accent-strong, var(--green-dark));
+  background: var(--page-soft, #e8eee8);
   font-family: var(--serif);
   font-size: 16px;
 }
@@ -121,7 +128,19 @@
 }
 
 .page {
+  position: relative;
   padding: 54px 0 84px;
+  isolation: isolate;
+}
+
+.page::before {
+  position: absolute;
+  inset: 26px 0 auto;
+  z-index: -1;
+  height: 190px;
+  border-radius: 26px;
+  background: linear-gradient(135deg, var(--page-soft), rgba(255, 255, 255, 0));
+  content: "";
 }
 
 .page-heading {
@@ -134,7 +153,7 @@
 
 .eyebrow {
   margin: 0 0 10px;
-  color: #8a7959;
+  color: var(--page-accent, #8a7959);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 1.6px;
@@ -213,11 +232,13 @@
   justify-content: space-between;
   overflow: hidden;
   padding: 38px 9% 38px 7%;
-  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 22px;
   color: #fffefa;
   background:
-    radial-gradient(ellipse at 87% 14%, rgba(201, 158, 86, 0.22), transparent 30%),
-    linear-gradient(120deg, #274638 0%, #355d4d 62%, #456452 100%);
+    radial-gradient(ellipse at 87% 14%, var(--page-glow), transparent 30%),
+    linear-gradient(120deg, var(--page-accent-strong) 0%, var(--page-accent) 52%, rgba(255, 255, 255, 0.14) 100%);
+  box-shadow: 0 22px 40px var(--page-glow);
 }
 
 .continue-copy {
@@ -338,8 +359,8 @@
   height: 100%;
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 11px;
-  background: var(--white);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), var(--page-soft));
   text-decoration: none;
   transition:
     transform 180ms ease,
@@ -348,9 +369,19 @@
 }
 
 .book-card-link:hover {
-  transform: translateY(-4px);
-  border-color: #d6d9cd;
-  box-shadow: 0 14px 32px rgba(39, 48, 39, 0.09);
+  transform: translateY(-5px);
+  border-color: var(--page-accent);
+  box-shadow: 0 18px 32px var(--page-glow);
+}
+
+.book-card .eyebrow,
+.book-card .status-label,
+.book-card .card-arrow {
+  color: var(--page-accent);
+}
+
+.book-card .book-card-copy {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.95));
 }
 
 .book-cover {
@@ -625,8 +656,8 @@
 .search-field:focus-within,
 .select-field:focus-within,
 .auth-form input:focus {
-  border-color: #74907f;
-  box-shadow: 0 0 0 3px rgba(53, 93, 77, 0.1);
+  border-color: var(--page-accent, #74907f);
+  box-shadow: 0 0 0 3px var(--page-glow, rgba(53, 93, 77, 0.1));
 }
 
 .shelf-result-line {
@@ -710,11 +741,11 @@
 
 .button-primary {
   color: #fffefa;
-  background: var(--green);
+  background: var(--page-accent, var(--green));
 }
 
 .button-primary:hover {
-  background: var(--green-dark);
+  background: var(--page-accent-strong, var(--green-dark));
 }
 
 .button-light {
@@ -723,14 +754,14 @@
 }
 
 .button-secondary {
-  border-color: #d6d9d0;
-  color: var(--green-dark);
+  border-color: var(--page-soft, #d6d9d0);
+  color: var(--page-accent-strong, var(--green-dark));
   background: transparent;
 }
 
 .button-secondary:not(:disabled):hover {
-  border-color: var(--green);
-  background: #eef2ed;
+  border-color: var(--page-accent, var(--green));
+  background: var(--page-soft, #eef2ed);
 }
 
 .button-wide {
@@ -801,8 +832,8 @@
 .status-pill {
   padding: 7px 11px;
   border-radius: 99px;
-  color: var(--green-dark);
-  background: #e8eee8;
+  color: var(--page-accent-strong, var(--green-dark));
+  background: var(--page-soft, #e8eee8);
   font-size: 10px;
   font-weight: 700;
 }

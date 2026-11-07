@@ -1,11 +1,18 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
+import useBooks from '../context/useBooks.js'
+import { getGenreThemeClass } from '../utils/genreThemes.js'
 
 function AppShell() {
   const { isAuthenticated, user, logout } = useAuth()
+  const { books } = useBooks()
+  const location = useLocation()
+  const matchedBookId = location.pathname.match(/^\/books\/(\d+)$/)?.[1]
+  const currentBook = books.find((book) => String(book.id) === matchedBookId)
+  const themeClass = getGenreThemeClass(currentBook?.genre || 'Fantasy')
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${themeClass}`}>
       <header className="topbar">
         <div className="topbar-inner">
           <NavLink className="brand" to={isAuthenticated ? '/dashboard' : '/login'} aria-label="Readlist home">

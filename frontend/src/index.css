@@ -17,8 +17,47 @@
   --green: #355d4d;
   --green-dark: #254637;
   --gold: #c99e56;
+  --page-accent: #355d4d;
+  --page-accent-strong: #254637;
+  --page-soft: #edf3ee;
+  --page-glow: rgba(53, 93, 77, 0.18);
   --serif: Georgia, "Times New Roman", serif;
   --sans: "Segoe UI", Arial, sans-serif;
+}
+
+.theme-fantasy {
+  --page-accent: #355d4d;
+  --page-accent-strong: #254637;
+  --page-soft: #edf3ee;
+  --page-glow: rgba(53, 93, 77, 0.18);
+}
+
+.theme-romance {
+  --page-accent: #b95d72;
+  --page-accent-strong: #7d3850;
+  --page-soft: #fbeef2;
+  --page-glow: rgba(185, 93, 114, 0.18);
+}
+
+.theme-mystery {
+  --page-accent: #4b3d60;
+  --page-accent-strong: #2c213a;
+  --page-soft: #efeaf7;
+  --page-glow: rgba(75, 61, 96, 0.18);
+}
+
+.theme-classics {
+  --page-accent: #a97a43;
+  --page-accent-strong: #785730;
+  --page-soft: #f8f0e3;
+  --page-glow: rgba(169, 122, 67, 0.18);
+}
+
+.theme-non-fiction {
+  --page-accent: #406783;
+  --page-accent-strong: #2e465c;
+  --page-soft: #eaf3fa;
+  --page-glow: rgba(64, 103, 131, 0.18);
 }
 
 * {
