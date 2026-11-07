@@ -4,6 +4,7 @@ import BookCover from '../components/BookCover.jsx'
 import PageHeading from '../components/PageHeading.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import useBooks from '../context/useBooks.js'
+import { getGenreThemeClass } from '../utils/genreThemes.js'
 
 function DashboardPage() {
   const { books } = useBooks()
@@ -11,9 +12,10 @@ function DashboardPage() {
   const completed = books.filter((book) => book.status === 'completed')
   const featuredBook = currentlyReading[0]
   const recentBooks = [...books].slice(0, 3)
+  const featuredTheme = getGenreThemeClass(featuredBook?.genre || 'Fantasy')
 
   return (
-    <div className="page dashboard-page">
+    <div className={`page dashboard-page ${featuredTheme}`}>
       <PageHeading
         eyebrow="YOUR READING SPACE"
         title="A good book makes a good day."

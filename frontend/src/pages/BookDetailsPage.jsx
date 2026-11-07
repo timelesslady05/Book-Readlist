@@ -5,6 +5,7 @@ import CoverSearch from '../components/CoverSearch.jsx'
 import PageHeading from '../components/PageHeading.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import useBooks from '../context/useBooks.js'
+import { getGenreThemeClass } from '../utils/genreThemes.js'
 
 const statusLabels = {
   want_to_read: 'Want to read',
@@ -20,6 +21,7 @@ function BookDetailsPage() {
   const [formMessage, setFormMessage] = useState('')
   const [draft, setDraft] = useState(null)
   const book = getBook(bookId)
+  const themeClass = getGenreThemeClass(book?.genre || 'Fantasy')
 
   if (!book) {
     return (
@@ -82,7 +84,7 @@ function BookDetailsPage() {
   }
 
   return (
-    <div className="page">
+    <div className={`page ${themeClass}`}>
       <Link className="back-link" to="/books">
         <span aria-hidden="true">←</span> Back to bookshelf
       </Link>

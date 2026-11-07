@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import BookCover from './BookCover.jsx'
 import ProgressBar from './ProgressBar.jsx'
+import { getGenreThemeClass } from '../utils/genreThemes.js'
 
 const statusLabels = {
   want_to_read: 'Want to read',
@@ -9,9 +10,11 @@ const statusLabels = {
 }
 
 function BookCard({ book }) {
+  const themeClass = getGenreThemeClass(book.genre)
+
   return (
-    <article className="book-card">
-      <Link className="book-card-link" to={`/books/${book.id}`}>
+    <article className={`book-card ${themeClass}`}>
+      <Link className={`book-card-link ${themeClass}`} to={`/books/${book.id}`}>
         <BookCover book={book} />
         <div className="book-card-copy">
           <div className="book-card-heading">

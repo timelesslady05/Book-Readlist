@@ -3,6 +3,7 @@ import BookCard from '../components/BookCard.jsx'
 import CoverSearch from '../components/CoverSearch.jsx'
 import PageHeading from '../components/PageHeading.jsx'
 import useBooks from '../context/useBooks.js'
+import { getGenreThemeClass } from '../utils/genreThemes.js'
 
 const emptyDraft = {
   title: '',
@@ -39,6 +40,7 @@ function BookshelfPage() {
     const matchesStatus = status === 'all' || book.status === status
     return matchesSearch && matchesGenre && matchesStatus
   })
+  const selectedTheme = getGenreThemeClass(genre === 'all' ? books[0]?.genre || 'Fantasy' : genre)
 
   async function handleCreateBook(event) {
     event.preventDefault()
@@ -65,7 +67,7 @@ function BookshelfPage() {
   }
 
   return (
-    <div className="page">
+    <div className={`page bookshelf-page ${selectedTheme}`}>
       <PageHeading
         eyebrow="YOUR PERSONAL LIBRARY"
         title="My bookshelf"
