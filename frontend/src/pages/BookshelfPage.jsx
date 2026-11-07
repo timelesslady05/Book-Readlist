@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import BookCard from '../components/BookCard.jsx'
+import CoverSearch from '../components/CoverSearch.jsx'
 import PageHeading from '../components/PageHeading.jsx'
 import useBooks from '../context/useBooks.js'
 
@@ -9,6 +10,7 @@ const emptyDraft = {
   genre: 'Fantasy',
   status: 'want_to_read',
   description: '',
+  cover_image_url: '',
   reading_progress: 0,
 }
 
@@ -45,6 +47,7 @@ function BookshelfPage() {
       await addBook({
         title: draft.title.trim(),
         author: draft.author.trim(),
+        cover_image_url: draft.cover_image_url || null,
         genre: draft.genre || 'Fantasy',
         description: draft.description.trim() || 'No description yet.',
         reading_progress: Number(draft.reading_progress || 0),
@@ -106,6 +109,12 @@ function BookshelfPage() {
               <input min="0" max="100" value={draft.reading_progress} onChange={(event) => setDraft((current) => ({ ...current, reading_progress: Number(event.target.value) }))} type="number" />
             </label>
           </div>
+          <CoverSearch
+            title={draft.title}
+            author={draft.author}
+            selectedCoverUrl={draft.cover_image_url}
+            onSelect={(coverUrl) => setDraft((current) => ({ ...current, cover_image_url: coverUrl }))}
+          />
           <label>
             Description
             <textarea rows="3" value={draft.description} onChange={(event) => setDraft((current) => ({ ...current, description: event.target.value }))} />
