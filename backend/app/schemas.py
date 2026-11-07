@@ -55,6 +55,7 @@ class BookCreate(BaseModel):
     genre: str | None = Field(default=None, max_length=80)
     description: str | None = Field(default=None, max_length=5000)
     cover_image_url: AnyHttpUrl | None = None
+    online_read_url: AnyHttpUrl | None = None
     rating: float | None = Field(default=None, ge=0, le=5)
     reading_progress: int = Field(default=0, ge=0, le=100)
     status: BookStatus = BookStatus.WANT_TO_READ
@@ -84,6 +85,7 @@ class BookUpdate(BaseModel):
     genre: str | None = Field(default=None, max_length=80)
     description: str | None = Field(default=None, max_length=5000)
     cover_image_url: AnyHttpUrl | None = None
+    online_read_url: AnyHttpUrl | None = None
     rating: float | None = Field(default=None, ge=0, le=5)
     reading_progress: int | None = Field(default=None, ge=0, le=100)
     status: BookStatus | None = None
@@ -125,6 +127,7 @@ class BookRead(BaseModel):
     genre: str | None
     description: str | None
     cover_image_url: AnyHttpUrl | None
+    online_read_url: AnyHttpUrl | None
     rating: float | None
     reading_progress: int
     status: BookStatus

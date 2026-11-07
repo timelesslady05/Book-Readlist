@@ -11,6 +11,7 @@ const emptyDraft = {
   status: 'want_to_read',
   description: '',
   cover_image_url: '',
+  online_read_url: '',
   reading_progress: 0,
 }
 
@@ -48,6 +49,7 @@ function BookshelfPage() {
         title: draft.title.trim(),
         author: draft.author.trim(),
         cover_image_url: draft.cover_image_url || null,
+        online_read_url: draft.online_read_url || null,
         genre: draft.genre || 'Fantasy',
         description: draft.description.trim() || 'No description yet.',
         reading_progress: Number(draft.reading_progress || 0),
@@ -113,7 +115,12 @@ function BookshelfPage() {
             title={draft.title}
             author={draft.author}
             selectedCoverUrl={draft.cover_image_url}
-            onSelect={(coverUrl) => setDraft((current) => ({ ...current, cover_image_url: coverUrl }))}
+            selectedOnlineUrl={draft.online_read_url}
+            onSelect={(book) => setDraft((current) => ({
+              ...current,
+              cover_image_url: book.coverUrl || '',
+              online_read_url: book.onlineUrl || '',
+            }))}
           />
           <label>
             Description

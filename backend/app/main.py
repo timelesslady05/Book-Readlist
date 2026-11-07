@@ -5,6 +5,7 @@ from collections.abc import AsyncIterator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 
 from app import models
 from app.database import Base, engine
@@ -16,6 +17,13 @@ from app.routers.books import router as books_router
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     """Create tables for registered models when the API starts."""
     Base.metadata.create_all(bind=engine)
+    with engine.begin() as connection:
+        connection.execute(
+            text(
+                "ALTER TABLE books "
+                "ADD COLUMN IF NOT EXISTS online_read_url VARCHAR(2048)"
+            )
+        )
     yield
 
 

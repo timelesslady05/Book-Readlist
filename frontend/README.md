@@ -15,7 +15,7 @@ Open the local address printed by Vite in your browser. The bookshelf, dashboard
 
 ## Find a book cover
 
-When adding or editing a book, enter its title and optionally its author, then choose **Find cover online**. Select the matching cover to save its image URL with the book. Cover search uses the public Open Library search and covers services and does not require an API key. If search is unavailable or no cover is found, the book can still be saved with the app's illustrated fallback cover.
+When adding or editing a book, enter its title and optionally its author, then choose **Find cover online**. Select a matching edition to save its cover and, when Open Library lists a public or borrowable digital copy, its **Read or borrow online** link. Links are also shown on the book details page. Cover search uses Open Library's public search and covers services and does not require an API key. If no digital edition is listed, the book can still be saved without an online link.
 
 ## Check the frontend
 

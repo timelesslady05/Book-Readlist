@@ -40,6 +40,7 @@ function BookDetailsPage() {
       title: book.title,
       author: book.author,
       cover_image_url: book.cover_image_url || '',
+      online_read_url: book.online_read_url || '',
       genre: book.genre,
       description: book.description,
       reading_progress: book.readingProgress,
@@ -56,6 +57,7 @@ function BookDetailsPage() {
         title: draft.title.trim(),
         author: draft.author.trim(),
         cover_image_url: draft.cover_image_url || null,
+        online_read_url: draft.online_read_url || null,
         genre: draft.genre,
         description: draft.description.trim(),
         reading_progress: Number(draft.reading_progress || 0),
@@ -123,7 +125,12 @@ function BookDetailsPage() {
             title={draft.title}
             author={draft.author}
             selectedCoverUrl={draft.cover_image_url}
-            onSelect={(coverUrl) => setDraft((current) => ({ ...current, cover_image_url: coverUrl }))}
+            selectedOnlineUrl={draft.online_read_url}
+            onSelect={(result) => setDraft((current) => ({
+              ...current,
+              cover_image_url: result.coverUrl || '',
+              online_read_url: result.onlineUrl || '',
+            }))}
           />
           <label>
             Description
@@ -169,6 +176,16 @@ function BookDetailsPage() {
               <h2>About this book</h2>
               <p>{book.description}</p>
             </div>
+            {book.online_read_url && (
+              <a
+                className="button button-secondary online-book-link"
+                href={book.online_read_url}
+                rel="noreferrer"
+                target="_blank"
+              >
+                Read or borrow online <span aria-hidden="true">↗</span>
+              </a>
+            )}
             {formMessage && <p className="form-message" role="status">{formMessage}</p>}
             <div className="book-form-actions">
               <button className="button button-secondary" type="button" onClick={startEditing}>

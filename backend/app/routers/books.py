@@ -35,8 +35,9 @@ def create_book(
 ) -> Book:
     """Add a book to the authenticated user's library."""
     book_data = payload.model_dump()
-    if book_data["cover_image_url"] is not None:
-        book_data["cover_image_url"] = str(book_data["cover_image_url"])
+    for field_name in ("cover_image_url", "online_read_url"):
+        if book_data[field_name] is not None:
+            book_data[field_name] = str(book_data[field_name])
     book = Book(**book_data, user_id=current_user.id)
     db.add(book)
     db.commit()
@@ -94,8 +95,9 @@ def update_book(
     """Update only supplied fields on one owned book."""
     book = get_owned_book(db, book_id, current_user.id)
     updates = payload.model_dump(exclude_unset=True)
-    if updates.get("cover_image_url") is not None:
-        updates["cover_image_url"] = str(updates["cover_image_url"])
+    for field_name in ("cover_image_url", "online_read_url"):
+        if updates.get(field_name) is not None:
+            updates[field_name] = str(updates[field_name])
     for field_name, value in updates.items():
         setattr(book, field_name, value)
     db.commit()

@@ -101,6 +101,7 @@ export function normalizeBook(book) {
     genre: book.genre || 'General',
     description: book.description || 'No description yet.',
     cover_image_url: book.cover_image_url || null,
+    online_read_url: book.online_read_url || null,
     rating: typeof book.rating === 'number' ? Number(book.rating) : null,
     readingProgress: Number(book.reading_progress ?? 0),
     status: normalizeStatus(book.status),

@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { searchBookCovers } from '../services/bookCoverSearch.js'
 
-function CoverSearch({ title, author, onSelect, selectedCoverUrl }) {
+function CoverSearch({ title, author, onSelect, selectedCoverUrl, selectedOnlineUrl }) {
   const [results, setResults] = useState([])
   const [isSearching, setIsSearching] = useState(false)
   const [message, setMessage] = useState('')
 
-  function handleSelect(coverUrl) {
-    onSelect(coverUrl)
-    setMessage('Cover selected.')
+  function handleSelect(book) {
+    onSelect(book)
+    setMessage(book.onlineUrl ? 'Cover and online link selected.' : 'Cover selected.')
   }
 
   async function handleSearch() {
@@ -24,7 +24,7 @@ function CoverSearch({ title, author, onSelect, selectedCoverUrl }) {
       const covers = await searchBookCovers(title, author)
       setResults(covers)
       if (!covers.length) {
-        setMessage('No covers found. You can still save the book without one.')
+        setMessage('No cover or online edition found. You can still save the book.')
       }
     } catch (error) {
       setMessage(error.message || 'Could not search for book covers.')
@@ -51,17 +51,28 @@ function CoverSearch({ title, author, onSelect, selectedCoverUrl }) {
       {results.length > 0 && (
         <div className="cover-search-results" aria-label="Cover search results">
           {results.map((book) => (
-            <button
-              aria-label={`Use cover for ${book.title} by ${book.author}`}
-              aria-pressed={selectedCoverUrl === book.coverUrl}
-              className={`cover-search-result${selectedCoverUrl === book.coverUrl ? ' cover-search-result--selected' : ''}`}
+            <div
+              className="cover-search-result"
               key={book.id}
-              onClick={() => handleSelect(book.coverUrl)}
-              type="button"
             >
-              <img src={book.coverUrl} alt="" />
-              <span>{book.title}<small>{book.author}</small></span>
-            </button>
+              <button
+                aria-label={`Select details for ${book.title} by ${book.author}`}
+                aria-pressed={selectedCoverUrl === book.coverUrl && selectedOnlineUrl === book.onlineUrl}
+                className={`cover-search-result-select${selectedCoverUrl === book.coverUrl && selectedOnlineUrl === book.onlineUrl ? ' cover-search-result-select--selected' : ''}`}
+                onClick={() => handleSelect(book)}
+                type="button"
+              >
+                {book.coverUrl ? <img src={book.coverUrl} alt="" /> : <span className="cover-search-no-image">No cover</span>}
+                <span>{book.title}<small>{book.author}</small></span>
+              </button>
+              {book.onlineUrl ? (
+                <a href={book.onlineUrl} rel="noreferrer" target="_blank">
+                  Read or borrow online
+                </a>
+              ) : (
+                <span className="cover-search-unavailable">No online edition listed</span>
+              )}
+            </div>
           ))}
         </div>
       )}

@@ -93,6 +93,7 @@ class Book(Base):
     genre: Mapped[str | None] = mapped_column(String(80), nullable=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     cover_image_url: Mapped[str | None] = mapped_column(String(2048), nullable=True)
+    online_read_url: Mapped[str | None] = mapped_column(String(2048), nullable=True)
     rating: Mapped[float | None] = mapped_column(Float, nullable=True)
     reading_progress: Mapped[int] = mapped_column(default=0)
     status: Mapped[BookStatus] = mapped_column(

@@ -1020,26 +1020,43 @@
 .cover-search-result {
   display: grid;
   flex: 0 0 150px;
-  gap: 8px;
+  align-content: start;
+  gap: 9px;
   padding: 8px;
   border: 1px solid var(--line);
   border-radius: 9px;
   background: var(--white);
   color: var(--ink);
+}
+
+.cover-search-result-select {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
   cursor: pointer;
   text-align: left;
 }
 
-.cover-search-result:hover {
+.cover-search-result-select:hover,
+.cover-search-result-select--selected {
   border-color: var(--green);
 }
 
-.cover-search-result--selected {
-  border-color: var(--green);
+.cover-search-result-select--selected img {
   box-shadow: 0 0 0 2px rgba(67, 94, 72, 0.14);
 }
 
-.cover-search-result img {
+.cover-search-result-select--selected {
+  outline: 2px solid rgba(67, 94, 72, 0.3);
+  outline-offset: 3px;
+}
+
+.cover-search-result-select img,
+.cover-search-no-image {
+  display: block;
   width: 100%;
   height: 130px;
   border-radius: 4px;
@@ -1047,7 +1064,14 @@
   object-fit: contain;
 }
 
-.cover-search-result span {
+.cover-search-no-image {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.cover-search-result-select > span:not(.cover-search-no-image) {
   overflow: hidden;
   font-size: 11px;
   font-weight: 700;
@@ -1055,7 +1079,7 @@
   white-space: nowrap;
 }
 
-.cover-search-result small {
+.cover-search-result-select small {
   display: block;
   overflow: hidden;
   margin-top: 3px;
@@ -1063,6 +1087,29 @@
   font-size: 10px;
   font-weight: 400;
   text-overflow: ellipsis;
+}
+
+.cover-search-result > a,
+.cover-search-unavailable {
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.cover-search-result > a:hover {
+  text-decoration: underline;
+}
+
+.cover-search-unavailable {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.online-book-link {
+  width: fit-content;
+  margin: 20px 0;
 }
 
 .auth-switch {

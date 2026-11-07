@@ -9,7 +9,7 @@ A full-stack reading tracker for keeping a personal bookshelf. Create an account
 - Track books as **Want to read**, **Currently reading**, or **Completed**.
 - Save a book's genre, description, rating, and reading progress.
 - Search and filter your bookshelf.
-- Search Open Library for a matching cover when adding or editing a book. Cover search is optional; the app uses an illustrated fallback if no cover is selected.
+- Search Open Library for a matching cover when adding or editing a book. When a matching edition is readable or borrowable online, save a direct link to its reader too. Cover search is optional; the app uses an illustrated fallback if no cover is selected.
 
 ## Technology
 
