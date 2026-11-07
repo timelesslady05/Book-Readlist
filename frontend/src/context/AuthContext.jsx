@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import {
+  AUTH_SESSION_EXPIRED_EVENT,
   clearStoredTokens,
   fetchCurrentUser,
   getStoredTokens,
@@ -14,6 +15,18 @@ const AuthContext = createContext(null)
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      clearStoredTokens()
+      setUser(null)
+    }
+
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired)
+    return () => {
+      window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired)
+    }
+  }, [])
 
   useEffect(() => {
     const initializeAuth = async () => {

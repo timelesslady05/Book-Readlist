@@ -1,11 +1,21 @@
 import axios from 'axios'
 
+const apiBaseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000',
+  baseURL: apiBaseURL,
   headers: {
     'Content-Type': 'application/json',
   },
 })
+const refreshApi = axios.create({
+  baseURL: apiBaseURL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+export const AUTH_SESSION_EXPIRED_EVENT = 'readlist:session-expired'
+let refreshPromise = null
 
 export function setAuthToken(token) {
   if (token) {
@@ -39,6 +49,35 @@ export function clearStoredTokens() {
   setRefreshToken(null)
 }
 
+function refreshTokens(refreshToken) {
+  if (!refreshPromise) {
+    refreshPromise = refreshApi
+      .post('/auth/refresh', { refresh_token: refreshToken })
+      .then((response) => {
+        const currentTokens = getStoredTokens()
+        if (currentTokens.refreshToken !== refreshToken) {
+          return currentTokens.accessToken
+        }
+
+        setAuthToken(response.data.access_token)
+        setRefreshToken(response.data.refresh_token)
+        return response.data.access_token
+      })
+      .catch((error) => {
+        if (getStoredTokens().refreshToken === refreshToken) {
+          clearStoredTokens()
+          window.dispatchEvent(new Event(AUTH_SESSION_EXPIRED_EVENT))
+        }
+        throw error
+      })
+      .finally(() => {
+        refreshPromise = null
+      })
+  }
+
+  return refreshPromise
+}
+
 api.interceptors.request.use((config) => {
   const { accessToken } = getStoredTokens()
   if (accessToken && config.headers) {
@@ -51,21 +90,40 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
-    const { refreshToken } = getStoredTokens()
+    const requestUrl = originalRequest?.url || ''
+    const authorization =
+      originalRequest?.headers?.Authorization ||
+      originalRequest?.headers?.authorization ||
+      originalRequest?.headers?.get?.('Authorization')
 
-    if (error.response?.status === 401 && !originalRequest._retry && refreshToken) {
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !originalRequest._retry &&
+      authorization &&
+      !requestUrl.startsWith('/auth/')
+    ) {
       originalRequest._retry = true
       try {
-        const response = await api.post('/auth/refresh', {
-          refresh_token: refreshToken,
-        })
-        const nextAccessToken = response.data.access_token
-        setAuthToken(nextAccessToken)
-        setRefreshToken(response.data.refresh_token)
+        const { accessToken, refreshToken } = getStoredTokens()
+        const requestToken = authorization.replace(/^Bearer\s+/i, '')
+        const nextAccessToken =
+          accessToken && accessToken !== requestToken
+            ? accessToken
+            : refreshToken
+              ? await refreshTokens(refreshToken)
+              : null
+
+        if (!nextAccessToken) {
+          clearStoredTokens()
+          window.dispatchEvent(new Event(AUTH_SESSION_EXPIRED_EVENT))
+          return Promise.reject(error)
+        }
+
         originalRequest.headers.Authorization = `Bearer ${nextAccessToken}`
         return api(originalRequest)
-      } catch {
-        clearStoredTokens()
+      } catch (refreshError) {
+        return Promise.reject(refreshError)
       }
     }
 
