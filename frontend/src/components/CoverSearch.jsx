@@ -8,7 +8,13 @@ function CoverSearch({ title, author, onSelect, selectedCoverUrl, selectedOnline
 
   function handleSelect(book) {
     onSelect(book)
-    setMessage(book.onlineUrl ? 'Cover and online link selected.' : 'Cover selected.')
+    let selectionMessage = 'Cover selected.'
+    if (book.coverUrl && book.onlineUrl) {
+      selectionMessage = 'Cover and online link selected.'
+    } else if (book.onlineUrl) {
+      selectionMessage = 'Online edition selected.'
+    }
+    setMessage(selectionMessage)
   }
 
   async function handleSearch() {
@@ -37,7 +43,7 @@ function CoverSearch({ title, author, onSelect, selectedCoverUrl, selectedOnline
   return (
     <div className="cover-search">
       <div className="cover-search-heading">
-        <p>Book cover <span>(optional)</span></p>
+        <p>Cover and online edition <span>(optional)</span></p>
         <button
           className="text-button"
           disabled={isSearching}
