@@ -107,12 +107,12 @@ api.interceptors.response.use(
       try {
         const { accessToken, refreshToken } = getStoredTokens()
         const requestToken = authorization.replace(/^Bearer\s+/i, '')
-        const nextAccessToken =
-          accessToken && accessToken !== requestToken
-            ? accessToken
-            : refreshToken
-              ? await refreshTokens(refreshToken)
-              : null
+        let nextAccessToken = null
+        if (accessToken && accessToken !== requestToken) {
+          nextAccessToken = accessToken
+        } else if (refreshToken) {
+          nextAccessToken = await refreshTokens(refreshToken)
+        }
 
         if (!nextAccessToken) {
           clearStoredTokens()
