@@ -91,6 +91,9 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
     const requestUrl = originalRequest?.url || ''
+    const isAuthRequest = ['/auth/token', '/auth/register', '/auth/refresh', '/auth/logout'].includes(
+      requestUrl,
+    )
     const authorization =
       originalRequest?.headers?.Authorization ||
       originalRequest?.headers?.authorization ||
@@ -101,7 +104,7 @@ api.interceptors.response.use(
       originalRequest &&
       !originalRequest._retry &&
       authorization &&
-      !requestUrl.startsWith('/auth/')
+      !isAuthRequest
     ) {
       originalRequest._retry = true
       try {
